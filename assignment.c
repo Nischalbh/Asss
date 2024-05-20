@@ -6,46 +6,56 @@ struct Product {
     float price;
 };
 
-// Function to calculate total amount including taxes
-float calculateTotalAmount(float subtotal) {
-    float taxRate = 0.07; // 7% tax rate
-    float tax = subtotal * taxRate;
-    return subtotal + tax;
-}
-
 int main() {
-    struct Product product;
-    float subtotal = 0.0;
+    struct Product products[100];
+    int count = 0;
     
     // Adding product information
-    printf("Enter product name: ");
-    scanf("%s", product.name);
-    printf("Enter product price: ");
-    scanf("%f", &product.price);
+    printf("product details:\n");
+    while(count < 100)
+    {
+        printf(" product name: ");
+        scanf(" %s", products[count].name); // prevent buffer overflow
+        printf(" product price: ");
+        scanf(" %f", &products[count].price);
+        count++;
+        char choice;
+        printf("Another product? (y/n): ");
+        scanf(" %c", &choice);
+        if (choice != 'y' && choice != 'Y')
+        {
+            break;
+        }
+    }
     
     // Calculating subtotal
-    subtotal += product.price;
-    
-    // Displaying total amount including taxes
-    float totalAmount = calculateTotalAmount(subtotal);
-    printf("Total amount (including taxes): $%.2f\n", totalAmount);
-    
+    float totalAmount ;
+    for (int i = 0; i < count; i++) {
+        totalAmount += products[i].price;
+    }
+
+    float taxRate = 0.07;
+    float taxAmount = totalAmount * taxRate;
+    float grandTotal = totalAmount + taxAmount;
+
     // Cash payment process
     float cashPayment;
-    printf("Enter cash amount: $");
+    printf("cash amount:");
     scanf("%f", &cashPayment);
     
     // Calculating change to be returned
-    float change = cashPayment - totalAmount;
-    printf("Change to be returned: $%.2f\n", change);
+    float change = cashPayment - grandTotal; // use grandTotal instead of totalAmount
+    printf(" returned: %.2f\n", change);
     
     // Generating receipt
     printf("\n--- Receipt ---\n");
-    printf("Product: %s\n", product.name);
-    printf("Price: $%.2f\n", product.price);
-    printf("Subtotal: $%.2f\n", subtotal);
-    printf("Tax: $%.2f\n", totalAmount - subtotal);
-    printf("Grand Total: $%.2f\n", totalAmount);
+    for (int i = 0; i < count; i++) {
+        printf("Product: %s\n", products[i].name);
+        printf("Price: $%.2f\n", products[i].price);
+    }
+    printf("Subtotal: $%.2f\n", totalAmount);
+    printf("Tax: $%.2f\n", taxAmount);
+    printf("Grand Total: $%.2f\n", grandTotal);
     
     return 0;
 }
